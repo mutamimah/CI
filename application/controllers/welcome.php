@@ -23,8 +23,28 @@ class Welcome extends CI_Controller {
 		$this->load->view('slider');
 		$this->load->view('project');
 		$this->load->view('footer');
+		
+		}
+	public function cek_login() {
+		$data = array('username' => $this->input->post('username', TRUE),
+						'password' => md5($this->input->post('password', TRUE))
+			);
+		$this->load->model('model_user'); // load model_user
+		$hasil = $this->model_user->cek_user($data);
+		if ($hasil->num_rows() == 1) {
+			foreach ($hasil->result() as $sess) {
+				$sess_data['logged_in'] = 'Sudah Loggin';
+				$sess_data['uid'] = $sess->uid;
+				$sess_data['username'] = $sess->username;
+				$sess_data['level'] = $sess->level;
+				$this->session->set_userdata($sess_data);
+			}
+			
 	}
-	
+
+}
+
+?>
 }
 
 /* End of file welcome.php */
